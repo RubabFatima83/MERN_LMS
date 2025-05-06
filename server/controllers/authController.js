@@ -8,7 +8,7 @@ const { generateOTP } = require('../utils/generateOTP')
 // Generate JWT
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRE || '1d'
+        expiresIn: process.env.JWT_EXPIRE || '7d'
     })
 }
 
@@ -27,8 +27,8 @@ const signUp = async (req, res) => {
         // Send Welcome Email
         await sendEmail({
             email: user.email,
-            subject: 'Welcome to Doctor Appointment System',
-            text: `Hi ${user.name}, welcome to our Doctor Appointment System!`
+            subject: 'Welcome to A Collaborative Learning Platform for Students',
+            text: `Hi ${user.name}, welcome to our Collaborative Learning Platform for Students!`
         })
 
         return res.status(201).json({

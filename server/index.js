@@ -19,7 +19,7 @@ app.use('/api/auth', authRoutes)
 
 // Test route
 app.get('/', (req, res) => {
-    res.send('Doctor Appointment System.')
+    res.send('A Collaborative Learning Platform for Students')
 });
 
 // Server
