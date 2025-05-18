@@ -35,10 +35,19 @@ const userSchema = new mongoose.Schema({
 
     role: { type: String, enum: ['Student', 'Mentor', 'Admin'], default: 'Student' },
 
+    // enrolledCourses: [
+    //     {
+    //         courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
+    //         courseName: String,
+    //         enrolledDate: Date
+    //     }
+    // ],
+
     resetPasswordToken: String,
     resetPasswordExpire: Date,
 
-    isOtpVerified: { type: Boolean, default: false }
+    accountVerified: { type: Boolean, default: false }
+
 
 }, { timestamps: true })
 

@@ -1,14 +1,21 @@
 const User = require('../models/user')
-const generateResetToken = require('../utils/generateToken')
+const ErrorHandler = require('../utils/errorHandler')
+const catchAsyncErrors = require('../middlewares/catchAsyncErrors')
+const generateResetToken = require('../utils/generatePasswordToken')
 const sendEmail = require('../utils/sendEmail')
+const { forgotPasswordTemplate } = require('../utils/emailTemplate')
 const crypto = require('crypto')
 
 // Forgot Password(Resquest reset link)
-const forgotPassword = async (req, res) => {
-    const { email } = req.body
+const forgotPassword = catchAsyncErrors(async (req, res, next) => {
+    const { name, email } = req.body
 
-    const user = await User.findOne({ email })
-    if (!user) return res.status(404).json({ message: 'User not found!' })
+    if (!email) {
+        return next(new ErrorHandler('Email is required.', 400))
+    }
+
+    const user = await User.findOne({ email, accountVerified: true })
+    if (!user) return next(new ErrorHandler('User not found!', 404))
 
     const { token, hashedToken, expireTime } = generateResetToken()
 
@@ -16,19 +23,18 @@ const forgotPassword = async (req, res) => {
     user.resetPasswordExpire = expireTime
     await user.save({ validateBeforeSave: false })
 
-    const resetUrl = `${req.protocol}://${req.get('host')}/api/auth/reset-password/${token}`
+    const resetUrl = `${process.env.FRONTEND_URI}/reset-password/${token}`
 
-    const message = `You are receiving this email because you (or someone else) has requested a password reset.\n\n
-    Please make a PUT request to: \n\n ${resetUrl}`
+    const html = forgotPasswordTemplate(user.name, resetUrl)
 
     try {
         await sendEmail({
             email: user.email,
-            subject: 'Password Reset Token',
-            message
+            subject: 'A Collaborative Learning Platform for Students (Password Recovery)',
+            html
         });
 
-        res.status(200).json({ success: true, message: 'Reset link sent to email' });
+        res.status(200).json({ success: true, message: `Password Reset link sent to ${user.email}` });
     } catch (error) {
         console.error(error);
         user.resetPasswordToken = undefined;
@@ -36,12 +42,14 @@ const forgotPassword = async (req, res) => {
 
         await user.save({ validateBeforeSave: false })
 
-        return res.status(500).json({ message: 'Email could not be sent.' })
+        return next(new ErrorHandler(error.message, 500))
     }
-}
+})
 
-const resetPassword = async (req, res) => {
+// Reset Password
+const resetPassword = catchAsyncErrors(async (req, res, next) => {
 
+    const { password, confirmPassword } = req.body
     // Hash URL token
     const { token } = req.params
     const hashedToken = crypto
@@ -52,17 +60,48 @@ const resetPassword = async (req, res) => {
     const user = await User.findOne({
         resetPasswordToken: hashedToken,
         resetPasswordExpire: { $gt: Date.now() }
-    });
+    })
 
-    if (!user) return res.status(400).json({ message: 'Invalid or expired token' })
+    if (!user) return next(new ErrorHandler('Invalid or expired token', 400))
+
+    if (password !== confirmPassword) {
+        return next(new ErrorHandler('Password & confirm password do not match.'))
+    }
 
     // Set new Password
-    user.password = req.body.password
+    user.password = password
     user.resetPasswordToken = undefined
     user.resetPasswordExpire = undefined
     await user.save()
 
-    res.status(200).json({ message: 'Password reset successfully!' })
-}
+    res.status(200).json({
+        success: true,
+        message: 'Password reset successfully!'
+    })
+})
 
-module.exports = { forgotPassword, resetPassword }
+// Update Password
+const updatePassword = catchAsyncErrors(async (req, res, next) => {
+    const { oldPassword, newPassword, confirmPassword } = req.body
+
+    const user = await User.findById(req.user.id).select('+password')
+    if (!user) return next(new ErrorHandler('User not found', 404))
+
+    const isMatch = await user.matchPassword(oldPassword)
+    if (!isMatch) return next(new ErrorHandler('Old password is incorrect', 400))
+
+    if (newPassword !== confirmPassword) {
+        return next(new ErrorHandler('New password and confirm password do not match', 400))
+    }
+
+    user.password = newPassword
+    await user.save()
+
+    res.status(200).json({
+        success: true,
+        message: 'Password updated successfully.',
+    })
+})
+
+
+module.exports = { forgotPassword, resetPassword, updatePassword }

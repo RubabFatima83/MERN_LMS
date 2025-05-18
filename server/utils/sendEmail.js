@@ -12,10 +12,11 @@ const sendEmail = async (options) => {
         })
 
         await transporter.sendMail({
-            from: `${process.env.FROM_NAME} <${process.env.FROM_EMAIL}>`,
+            from: `"Student Growth Hub" <${process.env.FROM_EMAIL}>`,
             to: options.email,
             subject: options.subject,
-            text: options.message || options.text
+            text: options.text || "",
+            html: options.html || ""
         })
 
         console.log('✅ Email sent successfully!')
