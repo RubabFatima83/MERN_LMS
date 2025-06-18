@@ -6,6 +6,7 @@ const { generateOTP } = require('../utils/generateVerificationOTP')
 const sendEmail = require('../utils/sendEmail')
 const { signupOtpTemplate, loginOtpTemplate } = require('../utils/emailTemplate')
 const sendToken = require('../utils/sendAuthenticationToken')
+const logEvent = require('../utils/logger')
 
 // Sign up
 const signUp = catchAsyncErrors(async (req, res, next) => {
@@ -27,8 +28,17 @@ const signUp = catchAsyncErrors(async (req, res, next) => {
 
         const html = signupOtpTemplate(name, otp)
         await sendEmail({ email, subject: 'Verify Your Account', html })
+
+        await logEvent({
+            level: 'info',
+            message: `New user registered (${role})`,
+            user: user._id
+        })
     }
-    return next(new ErrorHandler('Invalid credentials.', 401))
+    res.status(201).json({
+        success: true,
+        message: 'User registered successfully. Please check your email for the OTP.'
+    })
 })
 
 // Verify OTP
@@ -59,8 +69,14 @@ const verifyOtp = catchAsyncErrors(async (req, res, next) => {
 
         const record = await OTP.findOne({ email, otp });
         if (!record) {
+            await logEvent({
+                level: 'warn',
+                message: 'Invalid OTP attempt',
+                meta: { email }
+            })
             return next(new ErrorHandler('Invalid OTP.', 400));
         }
+
         if (record.expiresAt < Date.now()) {
             await OTP.deleteOne({ _id: record._id });
             return next(new ErrorHandler('OTP has expired.', 400));
@@ -70,6 +86,12 @@ const verifyOtp = catchAsyncErrors(async (req, res, next) => {
         await user.save();
 
         await OTP.deleteMany({ email });
+
+        await logEvent({
+            level: 'info',
+            message: 'User verified OTP and completed registration/login',
+            user: user._id
+        })
 
         return sendToken(res, user, 'Login successful.', 200);
 
@@ -85,6 +107,12 @@ const resendOtp = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('User not found or already verified.', 404));
     }
 
+    // Before resending
+    const recentOtp = await OTP.findOne({ email }).sort({ createdAt: -1 });
+    if (recentOtp && (Date.now() - recentOtp.createdAt.getTime()) < 60 * 1000) {
+        return next(new ErrorHandler('Please wait before requesting another OTP.', 429));
+    }
+
     const otp = generateOTP();
     await OTP.deleteMany({ email });
     await OTP.create({ email, otp, expiresAt: new Date(Date.now() + 10 * 60 * 1000) });
@@ -92,9 +120,14 @@ const resendOtp = catchAsyncErrors(async (req, res, next) => {
     const html = signupOtpTemplate(user.name, otp);
     await sendEmail({ email, subject: 'Your OTP Code', html });
 
+    await logEvent({
+        level: 'info',
+        message: 'OTP resent to user',
+        user: user._id
+    })
+
     res.status(200).json({ message: 'OTP resent successfully' });
 });
-
 
 // Login
 const login = catchAsyncErrors(async (req, res, next) => {
@@ -113,6 +146,12 @@ const login = catchAsyncErrors(async (req, res, next) => {
         return sendToken(res, user, 'Login successful.', 200);
     }
 
+    await logEvent({
+        level: 'info',
+        message: 'User password verified, pending OTP confirmation',
+        user: user._id
+    })
+
     const otp = generateOTP()
     await OTP.deleteMany({ email });
     await OTP.create({ email, otp, expiresAt: new Date(Date.now() + 10 * 60 * 1000) })
@@ -120,19 +159,31 @@ const login = catchAsyncErrors(async (req, res, next) => {
     const html = loginOtpTemplate(user.name, otp)
     await sendEmail({ email, subject: 'Your OTP Code', html })
 
+    await logEvent({
+        level: 'info',
+        message: 'User attempted login - OTP sent for verification',
+        user: user._id
+    })
+
     res.status(200).json({ message: 'OTP sent to your email. Please verify.' })
 })
 
 // Logout
 const logOut = catchAsyncErrors(async (req, res, next) => {
-    res.status(200).clearCookie('token');
+    await logEvent({
+        level: 'info',
+        message: 'User logged out',
+        user: req.user?._id
+    })
+    res.clearCookie('token');
     res.status(200).json({ success: true, message: 'Logged out successfully' });
 })
 
-const getMe = (req, res) => {
+const getMe = async (req, res) => {
+    const user = await User.findById(req.user._id).select('-password')
     res.status(200).json({
         success: true,
-        user: req.user, // comes from the protect middleware
+        user: user, // comes from the protect middleware
     })
 }
 

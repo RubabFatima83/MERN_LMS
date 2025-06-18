@@ -8,35 +8,43 @@ const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
-    const [userData, setUserData] = useState(null)
+    const [user, setUser] = useState(null)
 
 
-    // Check authentication on app load
     useEffect(() => {
+        // Check authentication on app load
         const checkAuth = async () => {
             try {
-                const { data } = await api.get("/auth/me")
-                setUserData(data.user)
+                const { data } = await api.get("/auth/me", {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                setUser(data.user)
                 setIsAuthenticated(true)
+                // console.log("loadUser fetched user →", data.user);
             } catch (error) {
                 console.error("Auth check failed:", error)
                 setIsAuthenticated(false)
-                setUserData(null)
+                setUser(null)
                 if (document.cookie.includes("token")) logout()
             } finally {
                 setIsLoading(false)
             }
         }
-
         checkAuth()
     }, [])
 
 
 
     // Singup function
-    const signup = async (userData) => {
+    const signup = async (user) => {
         try {
-            const { data } = await api.post('/auth/signup', userData)
+            const { data } = await api.post('/auth/signup', user, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
             return {
                 success: true, data
             }
@@ -51,12 +59,19 @@ export const AuthContextProvider = ({ children }) => {
     // Login function
     const login = async (email, password) => {
         try {
-            const { data } = await api.post('/auth/login', { email, password })
+            const { data } = await api.post('/auth/login', { email, password }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
 
             if (data?.user) {
-                setUserData(data.user)
+                setUser(data.user)
                 setIsAuthenticated(true)
             }
+            // if (data?.success) {
+            //     await checkAuth()
+            // }
 
             return {
                 success: true,
@@ -78,14 +93,15 @@ export const AuthContextProvider = ({ children }) => {
         } catch (error) {
             console.error('Logout failed:', error)
         } finally {
-            setUserData(null)
+            setUser(null)
             setIsAuthenticated(false)
         }
     }
 
     // Values provided to consumers
     const value = {
-        userData,
+        user,
+        setUser,
         isAuthenticated,
         isLoading,
         signup,

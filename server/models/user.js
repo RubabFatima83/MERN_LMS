@@ -33,20 +33,22 @@ const userSchema = new mongoose.Schema({
         }
     },
 
+    profileImage: { type: String, default: '' },
+
     role: { type: String, enum: ['Student', 'Mentor', 'Admin'], default: 'Student' },
 
-    // enrolledCourses: [
-    //     {
-    //         courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
-    //         courseName: String,
-    //         enrolledDate: Date
-    //     }
-    // ],
+    enrolledCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }],
 
     resetPasswordToken: String,
     resetPasswordExpire: Date,
 
-    accountVerified: { type: Boolean, default: false }
+    accountVerified: { type: Boolean, default: false },
+
+    subscription: {
+        type: String,
+        enum: ['free', 'monthly', 'yearly'],
+        default: 'free',
+    },
 
 
 }, { timestamps: true })

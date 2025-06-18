@@ -8,7 +8,7 @@ router.post('/signup', signUp)
 router.post('/verify-otp', verifyOtp)
 router.post('/resend-otp', resendOtp)
 router.post('/login', login)
-router.get('/logout', logOut)
+router.get('/logout', protect, logOut)
 router.get('/me', protect, getMe)
 
 

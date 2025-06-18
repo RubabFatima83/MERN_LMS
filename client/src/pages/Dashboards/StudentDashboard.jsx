@@ -1,50 +1,72 @@
 import React from 'react'
+import { Link, Navigate } from 'react-router-dom'
+import StudentLayout from '../../components/student/StudentLayout'
+
 
 const StudentDashboard = () => {
   return (
-    <div className="min-h-screen flex bg-gray-100">
-      {/* Sidebar */}
-      <aside className="w-64 bg-[#060872] shadow-lg p-6 hidden md:block">
-        <h2 className="text-2xl font-bold text-white mb-8 text-center">Student Panel</h2>
-        <nav className="space-y-4 text-sm">
-          <a href="#" className="block text-gray-100 hover:text-blue-300">Courses</a>
-          <a href="#" className="block text-gray-100 hover:text-blue-300">Assignments</a>
-          <a href="#" className="block text-gray-100 hover:text-blue-300">Grades</a>
-          <a href="#" className="block text-gray-100 hover:text-blue-300">Announcements</a>
-        </nav>
-      </aside>
+    <StudentLayout>
+      <Navigate to={'/student/courses'}></Navigate>
+    </StudentLayout>
+    // <StudentLayout>
+    // <div className="min-h-screen flex bg-[#0a1a40] text-gray-100">
 
-      {/* Main Content */}
-      <main className="flex-1 p-6">
-        <h1 className="text-3xl font-bold text-[#060872] mb-6">Welcome, Student!</h1>
+    //   {/* Main Content */}
+    //   <main className="flex-1 px-10 bg-[#0a1a40] min-h-screen overflow-auto">
+    //     {/* pt-16 to avoid navbar overlap */}
+    //     <h1 className="text-3xl md:text-4xl font-extrabold text-[#65a0ff] mb-8 tracking-wide">
+    //       Welcome, Student!
+    //     </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-          {/* Courses */}
-          <div className="bg-white shadow rounded-lg p-4 border-t-4 border-[#060872]">
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">Courses</h2>
-            <p className="text-gray-600">You are enrolled in 5 courses.</p>
-          </div>
-
-          {/* Assignments */}
-          <div className="bg-white shadow rounded-lg p-4 border-t-4 border-[#060872]">
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">Assignments</h2>
-            <p className="text-gray-600">You have 2 pending assignments.</p>
-          </div>
-
-          {/* Grades */}
-          <div className="bg-white shadow rounded-lg p-4 border-t-4 border-[#060872]">
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">Grades</h2>
-            <p className="text-gray-600">Your latest grade: A- in JavaScript.</p>
-          </div>
-
-          {/* Announcements */}
-          <div className="bg-white shadow rounded-lg p-4 border-t-4 border-[#060872]">
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">Announcements</h2>
-            <p className="text-gray-600">New semester starts on 1st June.</p>
-          </div>
-        </div>
-      </main>
-    </div>
+    //     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+    //       {/* Cards */}
+    //       {[
+    //         {
+    //           title: 'Courses',
+    //           content: (
+    //             <>
+    //               You are enrolled in <span className="font-bold">5</span> courses.
+    //             </>
+    //           ),
+    //         },
+    //         {
+    //           title: 'Assignments',
+    //           content: (
+    //             <>
+    //               You have <span className="font-bold">2</span> pending assignments.
+    //             </>
+    //           ),
+    //         },
+    //         {
+    //           title: 'Grades',
+    //           content: (
+    //             <>
+    //               Your latest grade: <span className="font-bold">A-</span> in JavaScript.
+    //             </>
+    //           ),
+    //         },
+    //         {
+    //           title: 'Announcements',
+    //           content: (
+    //             <>
+    //               New semester starts on <span className="font-bold">1st June</span>.
+    //             </>
+    //           ),
+    //         },
+    //       ].map(({ title, content }) => (
+    //         <div
+    //           key={title}
+    //           className="bg-[#012465] shadow-lg rounded-xl p-6 border-l-8 border-[#65a0ff]
+    //               hover:scale-[1.03] transition-transform duration-300 ease-in-out cursor-pointer"
+    //         >
+    //           <h2 className="text-2xl font-semibold text-[#e0e7ff] mb-3">{title}</h2>
+    //           <p className="text-[#b0c4ff]">{content}</p>
+    //         </div>
+    //       ))}
+    //     </div>
+    //   </main>
+    // </div>
+    // </StudentLayout>
   )
 }
 

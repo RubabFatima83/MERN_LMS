@@ -26,24 +26,24 @@ const protect = catchAsyncErrors(async (req, res, next) => {
 })
 
 
-const authorizeRole = (roles) => {
+const authorizeRole =  (roles) => {
 
-  return async (req, res, next) => {
+  return catchAsyncErrors(async (req, res, next) => {
     try {
       const user = await User.findById(req.user)
-      if (!user) return res.status(404).json({ message: 'User not found' })
+      if (!user) return next(new ErrorHandler('User not found', 404))
 
 
       if (!roles.includes(user.role))
-        return res.status(403).json({ message: 'Access Denied: Role is Not Authorized' })
+        return next(new ErrorHandler('Access Denied: Role is not authorized!', 403))
 
 
       next();
     } catch (error) {
-      console.error(error)
-      res.status(500).json({ message: 'Server Error' })
+      return next(new ErrorHandler('Server Error', 500))
+      // console.error(error)
     }
-  }
+  })
 }
 
 
