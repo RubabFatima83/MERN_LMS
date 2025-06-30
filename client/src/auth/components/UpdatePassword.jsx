@@ -2,8 +2,13 @@ import React, { useState } from 'react'
 import api from '../Services/api'
 import { toast } from 'react-toastify'
 import { X } from 'lucide-react'
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const UpdatePassword = ({ onClose }) => {
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const [formData, setFormData] = useState({
     oldPassword: '',
     newPassword: '',
@@ -61,48 +66,72 @@ const UpdatePassword = ({ onClose }) => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Old Password */}
-          <div>
+          <div className="relative">
             <label className="block mb-1 text-sm text-gray-300 font-medium">
               Old Password
             </label>
             <input
-              type="password"
+              type={showOldPassword ? 'text' : 'password'}
               name="oldPassword"
               value={formData.oldPassword}
               onChange={handleChange}
-              className="w-full bg-slate-800 text-white border border-slate-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-slate-800 text-white border border-slate-600 rounded px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
+            <button
+              type="button"
+              onClick={() => setShowOldPassword((prev) => !prev)}
+              className="absolute top-9 right-3 text-gray-400 hover:text-gray-600"
+              tabIndex={-1}
+            >
+              {showOldPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
           </div>
 
           {/* New Password */}
-          <div>
+          <div className="relative">
             <label className="block mb-1 text-sm text-gray-300 font-medium">
               New Password
             </label>
             <input
-              type="password"
+              type={showNewPassword ? 'text' : 'password'}
               name="newPassword"
               value={formData.newPassword}
               onChange={handleChange}
-              className="w-full bg-slate-800 text-white border border-slate-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-slate-800 text-white border border-slate-600 rounded px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
+            <button
+              type="button"
+              onClick={() => setShowNewPassword((prev) => !prev)}
+              className="absolute top-9 right-3 text-gray-400 hover:text-gray-600"
+              tabIndex={-1}
+            >
+              {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
           </div>
 
           {/* Confirm Password */}
-          <div>
+          <div className="relative">
             <label className="block mb-1 text-sm text-gray-300 font-medium">
               Confirm Password
             </label>
             <input
-              type="password"
+              type={showConfirmPassword ? 'text' : 'password'}
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full bg-slate-800 text-white border border-slate-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-slate-800 text-white border border-slate-600 rounded px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword((prev) => !prev)}
+              className="absolute top-9 right-3 text-gray-400 hover:text-gray-600"
+              tabIndex={-1}
+            >
+              {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
           </div>
 
           {/* Submit */}

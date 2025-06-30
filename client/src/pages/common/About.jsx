@@ -15,7 +15,8 @@ const fadeUp = {
 
 const AboutPage = () => {
   return (
-    <div id="about" className="min-h-screen bg-[#01133d] text-gray-100 py-16 px-6 md:px-20 space-y-24">
+    <div id="about" className="min-h-screen bg-[#01133d] text-gray-100 py-16 px-4 sm:px-6 md:px-20 space-y-24">
+      
       {/* Intro */}
       <motion.section
         className="max-w-5xl mx-auto space-y-8 text-center"
@@ -25,15 +26,17 @@ const AboutPage = () => {
         variants={fadeUp}
         custom={1}
       >
-        <h1 className="text-5xl font-bold text-white">About StudentSphere</h1>
-        <p className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight">
+          About StudentSphere
+        </h1>
+        <p className="text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto px-2">
           StudentSphere is a collaborative learning platform connecting students with mentors and empowering them through knowledge, real-world projects, and a strong academic network.
         </p>
       </motion.section>
 
       {/* What We Offer */}
       <motion.section
-        className="grid md:grid-cols-2 gap-10 items-center max-w-5xl mx-auto"
+        className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
@@ -47,9 +50,9 @@ const AboutPage = () => {
           whileHover={{ scale: 1.03 }}
           transition={{ duration: 0.3 }}
         />
-        <div className="space-y-4">
-          <h2 className="text-3xl font-semibold text-white">What We Offer</h2>
-          <ul className="list-disc list-inside text-gray-300 space-y-1">
+        <div className="space-y-4 text-center md:text-left">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-white">What We Offer</h2>
+          <ul className="list-disc list-inside text-gray-300 space-y-1 text-sm sm:text-base px-4 md:px-0">
             <li>Mentor-led, project-based courses</li>
             <li>Assignments, announcements, and student dashboards</li>
             <li>Secure login and role-based access</li>
@@ -61,15 +64,15 @@ const AboutPage = () => {
 
       {/* Team Section */}
       <motion.section
-        className="max-w-6xl mx-auto text-center"
+        className="max-w-6xl mx-auto text-center px-2"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={fadeUp}
         custom={3}
       >
-        <h2 className="text-4xl font-bold mb-12 text-white">Meet Our Team</h2>
-        <div className="grid md:grid-cols-3 gap-10 px-4">
+        <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-white">Meet Our Team</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10">
           {[
             {
               name: "Rubab Fatima",
@@ -101,7 +104,7 @@ const AboutPage = () => {
                 alt={`${member.name} - ${member.role}`}
                 className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-2 border-white"
               />
-              <h3 className="text-xl font-semibold text-white">{member.name}</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-white">{member.name}</h3>
               <p className="text-sm text-gray-300">{member.role}</p>
             </motion.div>
           ))}

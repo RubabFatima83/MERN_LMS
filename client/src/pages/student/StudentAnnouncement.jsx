@@ -12,7 +12,7 @@ const Announcements = () => {
     const fetchAnnouncements = async () => {
       try {
         const res = await api.get(`/student/announcements`);
-          setAnnouncements(res.data.data);
+        setAnnouncements(res.data.data);
       } catch (err) {
         setError('Failed to load announcements');
         console.error(err);
@@ -26,35 +26,39 @@ const Announcements = () => {
 
   return (
     <StudentLayout>
-      <div className="text-white">
-        <h2 className="text-3xl font-extrabold text-[#65a0ff] border-b border-[#65a0ff] py-8 mx-auto mb-6 pb-2">Announcements</h2>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-white">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#65a0ff] border-b border-[#65a0ff] pb-2 mb-8">
+          Announcements
+        </h2>
 
         {loading ? (
-          <p className="text-gray-300">Loading announcements...</p>
+          <p className="text-gray-300 text-sm sm:text-base">Loading announcements...</p>
         ) : error ? (
-          <p className="text-red-400">{error}</p>
+          <p className="text-red-400 text-sm sm:text-base">{error}</p>
         ) : announcements.length === 0 ? (
-          <p className="text-gray-400 text-center">No announcements available.</p>
+          <p className="text-gray-400 text-center text-sm sm:text-base">No announcements available.</p>
         ) : (
-          <ul className="space-y-5">
+          <ul className="space-y-6">
             {announcements.map(({ _id, title, message, createdAt, courseId }) => (
               <li
                 key={_id}
-                className="bg-[#012465] p-5 rounded-lg shadow-md border-l-4 border-[#65a0ff] transition-transform hover:scale-[1.01]"
+                className="bg-[#012465] p-4 sm:p-5 rounded-lg shadow-md border-l-4 border-[#65a0ff] transition-transform hover:scale-[1.01] duration-200"
               >
-                <div className="flex justify-between items-start mb-2">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
                   <div className="flex items-center gap-2 text-[#65a0ff]">
-                    <FaBullhorn className="w-5 h-5 mt-0.5" /> 
-                    <h3 className="text-xl font-semibold">{title}</h3>
+                    <FaBullhorn className="w-5 h-5 flex-shrink-0" />
+                    <h3 className="text-lg sm:text-xl font-semibold">{title}</h3>
                   </div>
-                  <span className="text-sm text-gray-300">
+                  <span className="text-xs sm:text-sm text-gray-300 sm:mt-1">
                     {new Date(createdAt).toLocaleDateString()}
                   </span>
                 </div>
                 {courseId && (
-                  <p className="text-sm text-gray-400 mb-1">Course: {courseId.title}</p>
+                  <p className="text-xs sm:text-sm text-gray-400 mb-1">
+                    Course: {courseId.title}
+                  </p>
                 )}
-                <p className="text-gray-200">{message}</p>
+                <p className="text-gray-200 text-sm sm:text-base whitespace-pre-line">{message}</p>
               </li>
             ))}
           </ul>

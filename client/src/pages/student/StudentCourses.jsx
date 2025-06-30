@@ -29,7 +29,7 @@ const StudentCourses = () => {
     <StudentLayout>
       <div className="flex">
         <main className="flex-1 mb-18 px-10 py bg-[#0a1a40] min-h-screen">
-          <h2 className="text-3xl font-extrabold text-[#65a0ff] border-b border-[#65a0ff] pb-2 mb-6">My Courses</h2>
+          <h2 className="text-2xl md:text-3xl font-extrabold text-[#65a0ff] border-b border-[#65a0ff] pb-2 mb-6">My Courses</h2>
 
           {loading ? (
             <p className="text-gray-400 text-lg">Loading courses...</p>

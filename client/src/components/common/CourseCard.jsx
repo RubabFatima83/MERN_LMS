@@ -68,7 +68,7 @@ const CourseCard = ({
   const handleCardClick = () => {
     if (role === 'Student' && isEnrolled) {
       navigate(`/student/course/${course._id}`);
-    } else if(role === 'Mentor') {
+    } else if (role === 'Mentor') {
       navigate(`/mentor/course-view/${course._id}`);
     } else {
       navigate(`/course/view/${course._id}`);
@@ -80,13 +80,13 @@ const CourseCard = ({
       onClick={handleCardClick}
       className={`group transition-all duration-300 rounded-xl overflow-hidden shadow-md hover:shadow-[0_0_20px_#3b82f6] cursor-pointer
     ${isHorizontal
-          ? 'flex gap-5 bg-gradient-to-r from-[#0b1b4f] to-[#01133d] border border-transparent hover:border-[#3b82f6] p-4 items-start'
+          ? 'flex flex-wrap sm:flex-nowrap gap-5 bg-gradient-to-r from-[#0b1b4f] to-[#01133d] border border-transparent hover:border-[#3b82f6] p-4 items-start'
           : 'flex flex-col bg-[#01133d] border border-[#1e3a8a] hover:border-[#3b82f6] p-5 h-full'
         }`}
     >
       {/* Thumbnail */}
       <div
-        className={`relative shrink-0 overflow-hidden rounded-xl ${isHorizontal ? 'w-[250px] h-[150px]' : 'w-full h-[180px] mb-4'
+        className={`relative shrink-0 overflow-hidden rounded-xl ${isHorizontal ? 'w-full sm:w-[250px] h-[150px]' : 'w-full h-[180px] mb-4'
           }`}
       >
         {!isEnrolled && (

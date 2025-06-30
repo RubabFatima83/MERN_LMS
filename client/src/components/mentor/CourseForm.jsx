@@ -19,8 +19,8 @@ const CourseForm = ({
   loading,
 }) => {
   return (
-    <div className="max-w-5xl mx-auto mb-21 p-8 bg-[#0a1a4f] rounded-2xl shadow-md border border-[#65a0ff] text-[#65a0ff]">
-      <h2 className="text-3xl font-bold mb-6 text-white">
+    <div className="max-w-5xl mx-auto mb-24 p-4 sm:p-6 bg-[#0a1a4f] rounded-2xl shadow-md border border-[#65a0ff] text-[#65a0ff]">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-white">
         {updating ? 'Update Course' : 'Create a New Course'}
       </h2>
 
@@ -53,8 +53,7 @@ const CourseForm = ({
         </div>
 
         {/* Category, Level, Language, Duration */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Category */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
             <label className="block mb-1 font-medium">Category *</label>
             <select
@@ -67,19 +66,14 @@ const CourseForm = ({
               <option className="text-[#0a1a4f] bg-[#65a0ff]" value="">
                 -- Select Category --
               </option>
-               {categoryOptions.map((cat, i) => (
-                <option
-                  className="text-[#0a1a4f] bg-[#a9caff]"
-                  key={i}
-                  value={cat}
-                >
+              {categoryOptions.map((cat, i) => (
+                <option key={i} value={cat} className="text-[#0a1a4f] bg-[#a9caff]">
                   {cat}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* Level */}
           <div>
             <label className="block mb-1 font-medium">Level *</label>
             <select
@@ -92,18 +86,13 @@ const CourseForm = ({
                 -- Select Level --
               </option>
               {levelOptions.map((lvl, i) => (
-                <option
-                  className="text-[#0a1a4f] bg-[#a9caff]"
-                  key={i}
-                  value={lvl}
-                >
+                <option key={i} value={lvl} className="text-[#0a1a4f] bg-[#a9caff]">
                   {lvl}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* Language - new field */}
           <div>
             <label className="block mb-1 font-medium">Language</label>
             <select
@@ -115,19 +104,14 @@ const CourseForm = ({
               <option className="text-[#0a1a4f] bg-[#65a0ff]" value="">
                 -- Select Language --
               </option>
-              {(languageOptions || []).map((lang, i) => (
-                <option
-                  key={i}
-                  value={lang}
-                  className="text-[#0a1a4f] bg-[#a9caff]"
-                >
+              {languageOptions.map((lang, i) => (
+                <option key={i} value={lang} className="text-[#0a1a4f] bg-[#a9caff]">
                   {lang}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* Duration */}
           <div>
             <label className="block mb-1 font-medium">Duration (in hours)</label>
             <input
@@ -157,8 +141,7 @@ const CourseForm = ({
         {/* Thumbnail Upload */}
         <div>
           <label className="block mb-1 font-medium">Thumbnail Image (Optional)</label>
-
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <input
               ref={fileInputRef}
               type="file"
@@ -167,44 +150,39 @@ const CourseForm = ({
               className="hidden"
               id="thumbnailInput"
             />
-
             <label
               htmlFor="thumbnailInput"
               className="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700 flex items-center gap-2"
             >
               <FaUpload /> Choose File
             </label>
-
-            <span className="text-sm text-white">
-              {thumbnail ? thumbnail.name : 'No file chosen'}
-            </span>
+            <span className="text-sm text-white">{thumbnail ? thumbnail.name : 'No file chosen'}</span>
           </div>
 
-          {/* Preview */}
           {thumbnailPreview && (
             <div className="mt-4">
-              <p className="font-medium">Preview:</p>
+              <p className="font-medium text-white">Preview:</p>
               <img
                 src={thumbnailPreview}
                 alt="Thumbnail Preview"
-                className="mt-2 rounded-lg border border-[#65a0ff] w-48 h-auto object-cover"
+                className="mt-2 rounded-lg border border-[#65a0ff] w-40 h-auto object-cover"
               />
             </div>
           )}
 
           {!thumbnailPreview && existingThumbnail && (
             <div className="mt-4">
-              <p className="font-medium">Current Thumbnail:</p>
+              <p className="font-medium text-white">Current Thumbnail:</p>
               <img
                 src={`${backendURL}/uploads/${existingThumbnail}`}
                 alt="Existing Thumbnail"
-                className="mt-2 rounded-lg border border-[#65a0ff] w-48 h-auto object-cover"
+                className="mt-2 rounded-lg border border-[#65a0ff] w-40 h-auto object-cover"
               />
             </div>
           )}
         </div>
 
-        {/* Is Premium Checkbox */}
+        {/* Is Premium */}
         <div>
           <label className="inline-flex items-center space-x-2 text-white font-medium">
             <input
@@ -227,27 +205,26 @@ const CourseForm = ({
         </div>
 
         {/* Buttons */}
-        <div className="flex justify-end gap-4">
+        <div className="flex flex-col sm:flex-row justify-end gap-4">
           <button
             type="button"
             onClick={resetForm}
-            className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded"
+            className="w-full sm:w-auto bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded"
           >
             Reset
           </button>
           <button
             type="submit"
             disabled={loading}
-            aria-busy={loading}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded"
+            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded"
           >
             {loading
               ? updating
                 ? 'Updating...'
                 : 'Creating...'
               : updating
-                ? 'Update Course'
-                : 'Create Course'}
+              ? 'Update Course'
+              : 'Create Course'}
           </button>
         </div>
       </form>

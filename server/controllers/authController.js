@@ -6,12 +6,11 @@ const { generateOTP } = require('../utils/generateVerificationOTP')
 const sendEmail = require('../utils/sendEmail')
 const { signupOtpTemplate, loginOtpTemplate } = require('../utils/emailTemplate')
 const sendToken = require('../utils/sendAuthenticationToken')
-const logEvent = require('../utils/logger')
 
 // Sign up
 const signUp = catchAsyncErrors(async (req, res, next) => {
-    const { name, email, password, role } = req.body
-    if (!name || !email || !password || !role) {
+    const { name, email, dateOfBirth } = req.body
+    if (!name || !email || !dateOfBirth) {
         return next(new ErrorHandler('All fields are required.', 400))
     }
 
@@ -20,7 +19,7 @@ const signUp = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('User already exists!', 400))
     }
 
-    const user = await User.create({ name, email, password, role })
+    const user = await User.create({ name, email, dateOfBirth })
 
     if (user) {
         const otp = generateOTP()
@@ -28,12 +27,6 @@ const signUp = catchAsyncErrors(async (req, res, next) => {
 
         const html = signupOtpTemplate(name, otp)
         await sendEmail({ email, subject: 'Verify Your Account', html })
-
-        await logEvent({
-            level: 'info',
-            message: `New user registered (${role})`,
-            user: user._id
-        })
     }
     res.status(201).json({
         success: true,
@@ -69,11 +62,6 @@ const verifyOtp = catchAsyncErrors(async (req, res, next) => {
 
         const record = await OTP.findOne({ email, otp });
         if (!record) {
-            await logEvent({
-                level: 'warn',
-                message: 'Invalid OTP attempt',
-                meta: { email }
-            })
             return next(new ErrorHandler('Invalid OTP.', 400));
         }
 
@@ -87,12 +75,6 @@ const verifyOtp = catchAsyncErrors(async (req, res, next) => {
 
         await OTP.deleteMany({ email });
 
-        await logEvent({
-            level: 'info',
-            message: 'User verified OTP and completed registration/login',
-            user: user._id
-        })
-
         return sendToken(res, user, 'Login successful.', 200);
 
     } catch (error) {
@@ -100,6 +82,7 @@ const verifyOtp = catchAsyncErrors(async (req, res, next) => {
     }
 })
 
+// Resend OTP
 const resendOtp = catchAsyncErrors(async (req, res, next) => {
     const { email } = req.body;
     const user = await User.findOne({ email });
@@ -119,12 +102,6 @@ const resendOtp = catchAsyncErrors(async (req, res, next) => {
 
     const html = signupOtpTemplate(user.name, otp);
     await sendEmail({ email, subject: 'Your OTP Code', html });
-
-    await logEvent({
-        level: 'info',
-        message: 'OTP resent to user',
-        user: user._id
-    })
 
     res.status(200).json({ message: 'OTP resent successfully' });
 });
@@ -146,12 +123,6 @@ const login = catchAsyncErrors(async (req, res, next) => {
         return sendToken(res, user, 'Login successful.', 200);
     }
 
-    await logEvent({
-        level: 'info',
-        message: 'User password verified, pending OTP confirmation',
-        user: user._id
-    })
-
     const otp = generateOTP()
     await OTP.deleteMany({ email });
     await OTP.create({ email, otp, expiresAt: new Date(Date.now() + 10 * 60 * 1000) })
@@ -159,22 +130,11 @@ const login = catchAsyncErrors(async (req, res, next) => {
     const html = loginOtpTemplate(user.name, otp)
     await sendEmail({ email, subject: 'Your OTP Code', html })
 
-    await logEvent({
-        level: 'info',
-        message: 'User attempted login - OTP sent for verification',
-        user: user._id
-    })
-
     res.status(200).json({ message: 'OTP sent to your email. Please verify.' })
 })
 
 // Logout
 const logOut = catchAsyncErrors(async (req, res, next) => {
-    await logEvent({
-        level: 'info',
-        message: 'User logged out',
-        user: req.user?._id
-    })
     res.clearCookie('token');
     res.status(200).json({ success: true, message: 'Logged out successfully' });
 })

@@ -11,7 +11,6 @@ const SubmissionModal = ({
   const [file, setFile] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
-  // Update modal fields when assignment changes or modal is opened
   useEffect(() => {
     if (assignment && isOpen) {
       setSubmissionText(assignment.submissionStatus?.submissionText || '');
@@ -35,7 +34,7 @@ const SubmissionModal = ({
 
       alert('Submitted successfully!');
       onClose();
-      if (onSubmitted) onSubmitted(); // refresh assignment list
+      if (onSubmitted) onSubmitted();
     } catch (error) {
       console.error('Submission failed', error);
       alert('Submission failed');
@@ -47,54 +46,60 @@ const SubmissionModal = ({
   if (!isOpen || !assignment) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-[1000] flex justify-center items-center px-4 sm:px-0">
-      <div className="bg-white rounded-xl max-w-lg w-full p-6 sm:p-8 shadow-lg relative max-h-[90vh] overflow-y-auto z-[1001]">
-        <h3 className="text-2xl font-semibold mb-6 text-gray-900">
-          {assignment.title || 'Assignment'} Submission
-        </h3>
+    <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center px-4 py-6 sm:px-6">
+      <div className="relative bg-white w-full max-w-2xl rounded-xl shadow-lg p-5 sm:p-8 overflow-y-auto max-h-[90vh]">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center sm:text-left">
+          Submit: {assignment.title || 'Assignment'}
+        </h2>
+
         <form onSubmit={handleSubmit}>
-          {/* Textarea */}
-          <label className="block mb-2 font-medium text-gray-700" htmlFor="submissionText">
+          {/* Submission Text */}
+          <label htmlFor="submissionText" className="block mb-2 text-gray-700 font-medium">
             Submission Text
           </label>
           <textarea
             id="submissionText"
-            className="w-full border border-gray-300 rounded-md p-3 mb-5 resize-y focus:outline-none focus:ring-2 focus:ring-[#65a0ff]"
             rows={5}
+            className="w-full border border-gray-300 rounded-lg p-3 mb-5 resize-y focus:outline-none focus:ring-2 focus:ring-[#65a0ff]"
             value={submissionText}
             onChange={(e) => setSubmissionText(e.target.value)}
+            placeholder="Write your response here..."
           />
 
-          {/* File Input */}
-          <label className="block mb-2 font-medium text-gray-700" htmlFor="fileUpload">
+          {/* File Upload */}
+          <label htmlFor="fileUpload" className="block mb-2 text-gray-700 font-medium">
             Upload File (optional)
           </label>
           <input
-            id="fileUpload"
             type="file"
-            onChange={(e) => setFile(e.target.files[0])}
-            className="mb-2"
+            id="fileUpload"
             accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg"
+            className="mb-3"
+            onChange={(e) => setFile(e.target.files[0])}
           />
           {file && (
-            <p className="text-sm text-gray-600 mb-4">Selected file: <strong>{file.name}</strong></p>
+            <p className="text-sm text-gray-600 mb-4">
+              Selected file: <strong>{file.name}</strong>
+            </p>
           )}
 
-          {/* Buttons */}
-          <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 mt-6">
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row sm:justify-end gap-3 mt-6">
             <button
               type="button"
               onClick={onClose}
               disabled={submitting}
-              className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition"
+              className="w-full sm:w-auto px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className={`w-full sm:w-auto px-4 py-2 rounded-md text-white font-medium transition ${
-                submitting ? 'bg-[#65a0ff]/70 cursor-not-allowed' : 'bg-[#65a0ff] hover:bg-[#4a7ddb]'
+              className={`w-full sm:w-auto px-4 py-2 text-white font-medium rounded-lg transition ${
+                submitting
+                  ? 'bg-[#65a0ff]/70 cursor-not-allowed'
+                  : 'bg-[#65a0ff] hover:bg-[#4a7ddb]'
               }`}
             >
               {submitting ? 'Submitting...' : 'Submit Assignment'}

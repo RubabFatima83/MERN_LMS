@@ -58,9 +58,13 @@ const CreateAnnouncement = () => {
 
   return (
     <MentorLayout>
-      <div className="max-w-4xl mx-auto mt-10 mb-12 bg-[#0a1a4f] border border-[#65a0ff] rounded-2xl p-8 shadow-md text-white">
-        <h2 className="text-3xl font-bold mb-8 text-[#65a0ff]">Create New Announcement</h2>
+      <div className="max-w-4xl mx-auto mt-10 mb-12 bg-[#0a1a4f] border border-[#65a0ff] rounded-2xl p-6 sm:p-8 shadow-md text-white">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-8 text-[#65a0ff] text-center sm:text-left">
+          Create New Announcement
+        </h2>
+
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Title */}
           <div>
             <label className="block mb-1 text-sm font-medium text-[#65a0ff]">Title</label>
             <input
@@ -73,6 +77,7 @@ const CreateAnnouncement = () => {
             />
           </div>
 
+          {/* Message */}
           <div>
             <label className="block mb-1 text-sm font-medium text-[#65a0ff]">Message</label>
             <textarea
@@ -85,54 +90,58 @@ const CreateAnnouncement = () => {
             />
           </div>
 
-          <div>
-            <label className="block mb-1 text-sm font-medium text-[#65a0ff]">Course (optional)</label>
-            <select
-              value={courseId}
-              onChange={(e) => setCourseId(e.target.value)}
-              className="w-full bg-transparent text-white border border-[#65a0ff] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#65a0ff]"
-            >
-              <option value="" disabled className="bg-[#0a1a4f] text-gray-400">Select Course</option>
-              {courses.map((c) => (
-                <option key={c._id} value={c._id} className="bg-[#0a1a4f] text-white">
-                  {c.title}
-                </option>
-              ))}
-            </select>
+          {/* Selects Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Course Select */}
+            <div className="relative">
+              <label className="block mb-1 text-sm font-medium text-[#65a0ff]">Course (optional)</label>
+              <select
+                value={courseId}
+                onChange={(e) => setCourseId(e.target.value)}
+                className="w-full bg-[#0a1a4f] text-white border border-[#65a0ff] rounded-lg px-4 py-2 pr-10 sm:text-sm text-xs focus:outline-none focus:ring-2 focus:ring-[#65a0ff] appearance-none"
+              >
+                <option value="" disabled className="text-gray-400">Select Course</option>
+                {courses.map((c) => (
+                  <option key={c._id} value={c._id}>{c.title}</option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 top-7 right-3 flex items-center text-white text-sm">▼</div>
+            </div>
+
+            {/* Assignment Select */}
+            <div className="relative">
+              <label className="block mb-1 text-sm font-medium text-[#65a0ff]">Assignment (optional)</label>
+              <select
+                value={assignmentId}
+                onChange={(e) => setAssignmentId(e.target.value)}
+                className="w-full bg-[#0a1a4f] text-white border border-[#65a0ff] rounded-lg px-4 py-2 pr-10 sm:text-sm text-xs focus:outline-none focus:ring-2 focus:ring-[#65a0ff] appearance-none"
+              >
+                <option value="" disabled className="text-gray-400">Select Assignment</option>
+                {assignments.map((a) => (
+                  <option key={a._id} value={a._id}>{a.title}</option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 top-7 right-3 flex items-center text-white text-sm">▼</div>
+            </div>
+
+            {/* Lecture Select */}
+            <div className="relative sm:col-span-2">
+              <label className="block mb-1 text-sm font-medium text-[#65a0ff]">Lecture (optional)</label>
+              <select
+                value={lectureId}
+                onChange={(e) => setLectureId(e.target.value)}
+                className="w-full bg-[#0a1a4f] text-white border border-[#65a0ff] rounded-lg px-4 py-2 pr-10 sm:text-sm text-xs focus:outline-none focus:ring-2 focus:ring-[#65a0ff] appearance-none"
+              >
+                <option value="" disabled className="text-gray-400">Select Lecture</option>
+                {lectures.map((l) => (
+                  <option key={l._id} value={l._id}>{l.title}</option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 top-7 right-3 flex items-center text-white text-sm">▼</div>
+            </div>
           </div>
 
-          <div>
-            <label className="block mb-1 text-sm font-medium text-[#65a0ff]">Assignment (optional)</label>
-            <select
-              value={assignmentId}
-              onChange={(e) => setAssignmentId(e.target.value)}
-              className="w-full bg-transparent text-white border border-[#65a0ff] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#65a0ff]"
-            >
-              <option value="" disabled className="bg-[#0a1a4f] text-gray-400">Select Assignment</option>
-              {assignments.map((a) => (
-                <option key={a._id} value={a._id} className="bg-[#0a1a4f] text-white">
-                  {a.title}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block mb-1 text-sm font-medium text-[#65a0ff]">Lecture (optional)</label>
-            <select
-              value={lectureId}
-              onChange={(e) => setLectureId(e.target.value)}
-              className="w-full bg-transparent text-white border border-[#65a0ff] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#65a0ff]"
-            >
-              <option value="" disabled className="bg-[#0a1a4f] text-gray-400">Select Lecture</option>
-              {lectures.map((l) => (
-                <option key={l._id} value={l._id} className="bg-[#0a1a4f] text-white">
-                  {l.title}
-                </option>
-              ))}
-            </select>
-          </div>
-
+          {/* Submit Button */}
           <div className="flex justify-end">
             <button
               type="submit"

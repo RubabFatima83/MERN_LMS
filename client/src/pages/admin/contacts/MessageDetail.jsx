@@ -48,15 +48,16 @@ const MessageDetails = () => {
 
   return (
     <AdminLayout>
-      <div className="max-w-3xl mx-auto mb-20 p-8 rounded-2xl shadow-md text-[#65a0ff]">
+      <div className="max-w-3xl mx-auto mb-20 px-4 sm:px-8 py-8 rounded-2xl shadow-md text-[#65a0ff]">
         <h2 className="text-3xl font-bold mb-6 text-white border-b border-[#65a0ff] pb-2">
           Message Details
         </h2>
-        <div className="bg-[#0b1f4c] p-6 border border-[#65a0ff] rounded-lg text-white space-y-4">
+
+        <div className="bg-[#0b1f4c] p-6 border border-[#65a0ff] rounded-lg text-white space-y-4 text-sm sm:text-base">
           <p><strong>Name:</strong> {message.name}</p>
           <p><strong>Email:</strong> {message.email}</p>
           <p><strong>Message:</strong> {message.message}</p>
-          <p className="text-sm text-[#9fc9ff]">Received: {new Date(message.createdAt).toLocaleString()}</p>
+          <p className="text-xs sm:text-sm text-[#9fc9ff]">Received: {new Date(message.createdAt).toLocaleString()}</p>
 
           {message.reply && (
             <div className="mt-4 border-t border-[#65a0ff] pt-4 text-green-400">
@@ -70,16 +71,16 @@ const MessageDetails = () => {
               placeholder="Subject"
               value={reply.subject}
               onChange={(e) => handleInputChange("subject", e.target.value)}
-              className="w-full px-4 py-2 border border-[#65a0ff] rounded bg-transparent text-white"
+              className="w-full px-4 py-2 border border-[#65a0ff] rounded bg-transparent text-white text-sm sm:text-base"
             />
             <textarea
               placeholder="Your reply..."
               rows="4"
               value={reply.message}
               onChange={(e) => handleInputChange("message", e.target.value)}
-              className="w-full px-4 py-2 border border-[#65a0ff] rounded bg-transparent text-white"
+              className="w-full px-4 py-2 border border-[#65a0ff] rounded bg-transparent text-white text-sm sm:text-base"
             />
-            <div className="flex justify-between">
+            <div className="flex flex-col sm:flex-row justify-between gap-3">
               <button
                 onClick={() => navigate("/admin/messages")}
                 className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded"

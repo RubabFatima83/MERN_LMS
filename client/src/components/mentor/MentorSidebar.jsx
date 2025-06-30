@@ -18,7 +18,6 @@ const MentorSidebar = ({ sidebarOpen, setSidebarOpen }) => {
     { label: 'Assignments', path: '/mentor/my-assignments', icon: FileText },
     { label: 'Announcements', path: '/mentor/announcements', icon: Megaphone },
     { label: 'Student List', path: '/mentor/student-overview', icon: Users },
-    // { label: 'Messages', path: '/mentor/messages', icon: MessageSquare },
     { label: 'Reports', path: '/mentor/reports', icon: BarChart2 },
   ];
 
@@ -55,7 +54,7 @@ const MentorSidebar = ({ sidebarOpen, setSidebarOpen }) => {
             `}
           >
             <Icon size={20} />
-            <span className="hidden md:inline">{label}</span>
+            <span className="md:inline">{label}</span>
           </Link>
         ))}
       </nav>

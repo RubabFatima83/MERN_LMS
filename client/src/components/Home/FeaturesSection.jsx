@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion } from 'framer-motion';
 
 const features = [
   {
@@ -54,34 +55,59 @@ const features = [
   }
 ]
 
+const cardVariants = {
+  offscreen: {
+    opacity: 0,
+    y: 40,
+  },
+  onscreen: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: 'spring',
+      bounce: 0.2,
+      duration: 0.8,
+    },
+  },
+};
+
 const FeaturesSection = () => {
   return (
-    <section id='features' className="bg-[#001845] text-white py-12 sm:py-16">
+    <section id="features" className="bg-[#001845] text-white py-14 sm:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-3xl sm:text-4xl md:text-3xl font-extrabold mb-10 sm:mb-12 tracking-wide">
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-12 tracking-wide"
+        >
           Why Choose <span className="text-[#65a0ff]">StudentSphere?</span>
-        </h2>
+        </motion.h2>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10">
           {features.map((feature, index) => (
-            <div
+            <motion.div
               key={index}
               className="bg-[#012465] p-6 sm:p-8 rounded-3xl shadow-lg cursor-pointer 
-                         transform transition duration-500 ease-in-out
-                         hover:shadow-xl hover:-translate-y-2 hover:scale-105
-                         animate-fadeInUp"
-              style={{ animationDelay: `${index * 150}ms` }}
+                         transform transition duration-300 ease-in-out
+                         hover:shadow-xl hover:-translate-y-2 hover:scale-105"
+              variants={cardVariants}
+              initial="offscreen"
+              whileInView="onscreen"
+              viewport={{ once: true, amount: 0.2 }}
             >
-              <div className="mb-5 flex justify-center items-center">
+              <div className="mb-5 flex justify-center items-center text-4xl text-[#65a0ff]">
                 {feature.icon}
               </div>
               <h3 className="text-xl sm:text-2xl font-semibold mb-2 sm:mb-3">{feature.title}</h3>
               <p className="text-gray-300 leading-relaxed text-sm sm:text-base">{feature.description}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
 export default FeaturesSection                     

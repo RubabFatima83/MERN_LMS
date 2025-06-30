@@ -27,7 +27,7 @@ const AddTerms = () => {
   return (
     <AdminLayout>
       <div className="max-w-4xl mx-auto mt-10 mb-12">
-        <h2 className="text-3xl font-extrabold text-[#65a0ff] mb-6">Add Terms of Service</h2>
+        <h2 className="text-2xl md:text-3xl font-extrabold text-[#65a0ff] mb-6">Add Terms of Service</h2>
         <TermsForm
           formData={formData}
           handleChange={handleChange}

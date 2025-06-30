@@ -74,8 +74,8 @@ const AnalyticsOverview = () => {
       ) : error ? (
         <div className="text-red-600 text-center py-10">Error: {error}</div>
       ) : (
-        <div className="p-6 max-w-7xl mx-auto">
-          <h1 className="text-3xl font-semibold text-[#65a0ff] mb-6 border-b border-[#65a0ff] pb-2 tracking-wide drop-shadow-lg">
+        <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-[#65a0ff] mb-6 border-b border-[#65a0ff] pb-2 tracking-wide drop-shadow-lg">
             Admin Analytics Overview
           </h1>
 
@@ -89,54 +89,58 @@ const AnalyticsOverview = () => {
               >
                 <div className="flex items-center gap-3 mb-2">
                   {item.icon}
-                  <p className="text-[#e0e7ff] text-lg font-medium">{item.label}</p>
+                  <p className="text-[#e0e7ff] text-base sm:text-lg font-medium">{item.label}</p>
                 </div>
-                <p className="text-[#e0e7ff] text-3xl font-semibold">{item.value ?? '—'}</p>
+                <p className="text-[#e0e7ff] text-2xl sm:text-3xl font-semibold">{item.value ?? '—'}</p>
               </div>
             ))}
-
           </div>
 
           {/* Charts Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
             {/* Pie Chart */}
-            <div className="bg-[#012465] p-6 rounded-xl shadow-lg">
-              <h2 className="text-[#e0e7ff] text-xl mb-4">User Role Distribution</h2>
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={roleData}
-                    dataKey="value"
-                    nameKey="name"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={100}
-                    label
-                  >
-                    {roleData.map((_, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
+            <div className="bg-[#012465] p-4 sm:p-6 rounded-xl shadow-lg">
+              <h2 className="text-[#e0e7ff] text-lg sm:text-xl mb-4">User Role Distribution</h2>
+              <div className="w-full h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={roleData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={100}
+                      label
+                    >
+                      {roleData.map((_, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip contentStyle={{ backgroundColor: "#1e293b", borderColor: "#65a0ff", color: "#fff" }} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
             </div>
 
             {/* Bar Chart */}
-            <div className="bg-[#012465] p-6 rounded-xl shadow-lg">
-              <h2 className="text-[#e0e7ff] text-xl mb-4">Content Overview</h2>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={contentData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                  <XAxis dataKey="name" stroke="#e0e7ff" />
-                  <YAxis stroke="#e0e7ff" />
-                  <Tooltip />
-                  <Bar dataKey="count" fill="#65a0ff" barSize={40} />
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="bg-[#012465] p-4 sm:p-6 rounded-xl shadow-lg">
+              <h2 className="text-[#e0e7ff] text-lg sm:text-xl mb-4">Content Overview</h2>
+              <div className="w-full h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={contentData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                    <XAxis dataKey="name" stroke="#e0e7ff" />
+                    <YAxis stroke="#e0e7ff" />
+                    <Tooltip contentStyle={{ backgroundColor: "#1e293b", borderColor: "#65a0ff", color: "#fff" }} />
+                    <Bar dataKey="count" fill="#65a0ff" barSize={40} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
         </div>
+
       )}
     </AdminLayout>
   );

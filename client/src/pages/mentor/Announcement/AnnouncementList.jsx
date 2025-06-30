@@ -25,39 +25,41 @@ const MentorAnnouncementList = () => {
 
   return (
     <MentorLayout>
-      <div className="max-w-4xl mx-auto mt-10">
-        <div className="flex justify-between items-center border-b border-[#65a0ff] pb-4 mb-6">
-          <h2 className="text-3xl font-extrabold text-[#65a0ff]">
+      <div className="max-w-5xl mx-auto mt-10 px-4 sm:px-6">
+        {/* Header Section */}
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 border-b border-[#65a0ff] pb-4 mb-6">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#65a0ff]">
             My Announcements
           </h2>
           <button
             onClick={clickCreateAnnouncement}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition w-full sm:w-auto"
           >
             Create Announcement
           </button>
         </div>
 
+        {/* Announcement List */}
         {announcements.length === 0 ? (
-          <p className="text-white">No announcements found.</p>
+          <p className="text-white text-center">No announcements found.</p>
         ) : (
-          <ul className="space-y-4">
+          <ul className="space-y-5">
             {announcements.map((a) => (
               <li
                 key={a._id}
-                className="text-[#65a0ff] bg-[#012465] border-l-4 border-[#65a0ff] p-4 shadow rounded"
+                className="bg-[#012465] border-l-4 border-[#65a0ff] p-4 sm:p-5 rounded-xl shadow transition"
               >
-                <div className="mb-2">
-                  <h3 className="text-lg font-semibold">{a.title}</h3>
+                <div className="space-y-1">
+                  <h3 className="text-lg sm:text-xl font-semibold text-[#65a0ff]">{a.title}</h3>
                   <p className="text-sm text-gray-300">{a.message}</p>
-                  <div className="text-sm text-gray-400 mt-1">
-                    {a.courseId && <span>📘 Course: {a.courseId.title} | </span>}
-                    {a.lectureId && <span>🎥 Lecture: {a.lectureId.title} | </span>}
-                    {a.assignmentId && <span>📝 Assignment: {a.assignmentId.title}</span>}
+                  <div className="text-sm text-gray-400">
+                    {a.courseId && <span>📘 <b>Course:</b> {a.courseId.title} </span>}
+                    {a.lectureId && <span> | 🎥 <b>Lecture:</b> {a.lectureId.title} </span>}
+                    {a.assignmentId && <span> | 📝 <b>Assignment:</b> {a.assignmentId.title}</span>}
                   </div>
-                </div>
-                <div className="text-xs text-gray-500 mt-1">
-                  Posted on: {new Date(a.createdAt).toLocaleString()}
+                  <div className="text-xs text-gray-500 mt-1">
+                    Posted on: {new Date(a.createdAt).toLocaleString()}
+                  </div>
                 </div>
               </li>
             ))}

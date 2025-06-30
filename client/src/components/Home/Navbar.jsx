@@ -34,22 +34,25 @@ const Navbar = () => {
     }
   };
 
-  const handleNavClick = (e, link) => {
-    e.preventDefault();
-    setActiveSection(link.name); // Set clicked section active
+  const handleNavClick = async (e, link) => {
+  e.preventDefault();
+  setActiveSection(link.name); // Set clicked section active
 
-    if (link.path === '/') {
-      if (location.pathname === '/') {
-        scrollToSection(link.scrollToId);
-      } else {
-        navigate('/', { replace: false });
-        setTimeout(() => {
-          scrollToSection(link.scrollToId);
-        }, 100);
-      }
+  const scrollLater = () => scrollToSection(link.scrollToId);
+
+  if (link.path === '/') {
+    if (location.pathname === '/') {
+      // Delay to allow menu to close before scroll
       setIsOpen(false);
+      setTimeout(scrollLater, 300); // Wait for AnimatePresence to close
+    } else {
+      setIsOpen(false);
+      navigate('/', { replace: false });
+      setTimeout(scrollLater, 300); // Wait after navigation
     }
-  };
+  }
+};
+
 
   return (
     <div style={{ backgroundColor: '#001845', position: 'sticky', top: 0, zIndex: 50 }}>
@@ -67,7 +70,7 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link
             to="/"
-            className="text-2xl font-extrabold text-white tracking-tight hover:text-blue-400 transition duration-200"
+            className="text-xl md:text-2xl font-extrabold text-white tracking-tight hover:text-blue-400 transition duration-200"
             onClick={(e) => {
               if (location.pathname === '/') {
                 e.preventDefault();
@@ -88,9 +91,8 @@ const Navbar = () => {
                   <Link
                     to={link.path}
                     onClick={(e) => handleNavClick(e, link)}
-                    className={`hover:text-white transition duration-150 ${
-                      activeSection === link.name ? 'text-white underline underline-offset-4' : 'text-gray-300'
-                    }`}
+                    className={`hover:text-white transition duration-150 ${activeSection === link.name ? 'text-white underline underline-offset-4' : 'text-gray-300'
+                      }`}
                   >
                     {link.name}
                   </Link>
@@ -106,14 +108,26 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Menu Toggle */}
-          <button
-            className="md:hidden text-2xl text-white focus:outline-none"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle menu"
-          >
-            {isOpen ? <FaTimes /> : <FaBars />}
-          </button>
+          {/* Mobile: Hamburger + Profile icon */}
+          <div className="md:hidden flex items-center gap-4">
+            <button
+              className="text-xl  text-white focus:outline-none"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="Toggle menu"
+            >
+              {isOpen ? <FaTimes /> : <FaBars />}
+            </button>
+
+            {user && (
+              <div className="relative">
+                <ProfileMenu
+                  showProfileMenu={showProfileMenu}
+                  setShowProfileMenu={setShowProfileMenu}
+                />
+              </div>
+            )}
+          </div>
+
         </div>
 
         {/* Mobile Navigation Menu */}
@@ -124,20 +138,18 @@ const Navbar = () => {
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden bg-[#0c1b3c] px-4 pb-4 overflow-hidden shadow-inner"
+              className="md:hidden bg-[#ffffff] px-4 pb-4 shadow-inner relative z-50
+             max-h-[90vh] overflow-y-auto custom-scrollbar"
             >
-              <ul className="flex flex-col space-y-3 text-sm font-medium mt-2">
+
+              <ul className="flex gap-6 text-sm font-medium justify-center pt-3">
                 {navLinks.map((link) => (
                   <li key={link.name}>
                     <Link
                       to={link.path}
-                      onClick={(e) => {
-                        handleNavClick(e, link);
-                        setIsOpen(false);
-                      }}
-                      className={`block py-2 px-2 rounded hover:bg-[#1e2f59] transition ${
-                        activeSection === link.name ? 'text-white underline underline-offset-4' : 'text-gray-300'
-                      }`}
+                      onClick={(e) => handleNavClick(e, link)}
+                      className={`hover:text-white transition duration-150 ${activeSection === link.name ? 'text-blue-950 font-bold underline underline-offset-4' : 'text-blue-950'
+                        }`}
                     >
                       {link.name}
                     </Link>

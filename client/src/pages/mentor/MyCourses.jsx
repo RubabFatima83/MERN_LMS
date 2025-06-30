@@ -57,8 +57,8 @@ const MyCourses = () => {
   return (
     <MentorLayout>
       <div className="p-6 max-w-7xl mx-auto text-white">
-        <div className="flex justify-between items-center border-b border-[#65a0ff] pb-4 mb-6">
-          <h2 className="text-3xl font-extrabold text-[#65a0ff]">
+        <div className="flex flex-col sm:flex-row sm:justify-between items-center gap-4 mb-6">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-[#65a0ff]">
             My Courses
           </h2>
           <button
@@ -74,7 +74,7 @@ const MyCourses = () => {
           <p className="text-gray-300 text-center text-lg">Loading your courses...</p>
         ) : courses.length === 0 ? (
           <div className="text-center py-12">
-            <img src="/no-courses.svg" alt="No courses" className="w-40 mx-auto mb-4" />
+            <img src="/no-courses.svg" alt="No courses" className="w-32 sm:w-40 mx-auto mb-4" />
             <p className="text-gray-400 italic text-lg">You haven’t created any courses yet.</p>
           </div>
         ) : (

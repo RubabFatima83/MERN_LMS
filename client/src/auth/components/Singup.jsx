@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../auth/context/AuthContext';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Signup = () => {
   const navigate = useNavigate();
   const { signup } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -75,18 +77,27 @@ const Signup = () => {
             />
           </div>
 
-          <div>
+          <div className="relative">
             <label className="block text-sm font-semibold mb-1">Password</label>
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               name="password"
               placeholder="Minimum 6 characters"
-              className="w-full p-3 rounded-lg bg-[#334155] text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 pr-10 rounded-lg bg-[#334155] text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={formData.password}
               onChange={handleChange}
               required
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute top-10 right-3 text-gray-400 hover:text-gray-600"
+              tabIndex={-1}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
           </div>
+
 
           <div>
             <label className="block text-sm font-semibold mb-1">Role</label>

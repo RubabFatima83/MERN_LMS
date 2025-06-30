@@ -10,11 +10,22 @@ const StudentList = () => {
   const { user } = useAuth();
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  // Track screen width on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const mentorId = user._id
+        const mentorId = user._id;
         const res = await api.get(`/mentor/${mentorId}/enrolled-students`);
         setStudents(res.data?.students || []);
       } catch (error) {
@@ -28,7 +39,6 @@ const StudentList = () => {
     fetchStudents();
   }, []);
 
-  // Define columns
   const columns = [
     { header: 'Name', accessor: 'name' },
     { header: 'Email', accessor: 'email' },
@@ -36,19 +46,20 @@ const StudentList = () => {
     { header: 'Progress(%)', accessor: 'progress' },
   ];
 
-  // Format students data
   const formattedStudents = students.map((student) => ({
     ...student,
     enrolledCourses:
       student.courses && student.courses.length > 0
         ? student.courses.map(course => course.title).join(', ')
         : '—',
-    // If you want to show overall progress, you might calculate average or something else
-    progress: student.courses && student.courses.length > 0
-      ? (student.courses.reduce((acc, c) => acc + c.progress, 0) / student.courses.length).toFixed(2)
-      : '—',
+    progress:
+      student.courses && student.courses.length > 0
+        ? (
+            student.courses.reduce((acc, c) => acc + (c.progress || 0), 0) /
+            student.courses.length
+          ).toFixed(2)
+        : '—',
   }));
-
 
   return (
     <MentorLayout>
@@ -59,7 +70,33 @@ const StudentList = () => {
 
         {loading ? (
           <p className="text-gray-300 text-center text-lg">Loading students...</p>
+        ) : isMobile ? (
+          // ✅ Card layout for mobile
+          <div className="space-y-4">
+            {formattedStudents.length === 0 ? (
+              <p className="text-center text-gray-300 italic">No students found.</p>
+            ) : (
+              formattedStudents.map((student, idx) => (
+                <div
+                  key={idx}
+                  className="bg-[#012465] rounded-lg p-4 border-l-4 border-[#65a0ff] shadow"
+                >
+                  <p className="text-base font-semibold text-[#65a0ff] mb-1">{student.name}</p>
+                  <p className="text-sm text-gray-400 mb-1">
+                    <strong className='text-gray-200'>Email:</strong> {student.email}
+                  </p>
+                  <p className="text-sm text-gray-400 mb-1">
+                    <strong className='text-gray-200'>Courses:</strong> {student.enrolledCourses}
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    <strong className='text-gray-200'>Progress:</strong> {student.progress}%
+                  </p>
+                </div>
+              ))
+            )}
+          </div>
         ) : (
+          // ✅ Table layout for >768px
           <ReusableTable columns={columns} data={formattedStudents} />
         )}
       </div>

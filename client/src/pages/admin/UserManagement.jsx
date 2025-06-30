@@ -72,60 +72,89 @@ const UserManagement = () => {
               Total Registered Users: <strong>{users.length}</strong>
             </p>
 
-            <div className="overflow-x-auto rounded-lg shadow-lg border border-[#65a0ff] bg-[#012465]">
-              <table className="min-w-full divide-y divide-[#65a0ff] text-[#e0e7ff]">
+            {/* TABLE FOR LARGE SCREENS */}
+            <div className="overflow-x-auto rounded-lg shadow-lg border border-[#65a0ff] bg-[#012465] hidden lg:block">
+              <table className="min-w-full divide-y divide-[#65a0ff] text-[#e0e7ff] text-sm lg:text-base">
                 <thead>
                   <tr className="border-b border-[#65a0ff]">
-                    {['ID', 'Name', 'Email', 'Role', 'Actions'].map((header) => (
-                      <th
-                        key={header}
-                        className="px-6 py-3 text-left text-sm font-semibold tracking-wide"
-                      >
-                        {header}
-                      </th>
-                    ))}
+                    <th className="p-3 text-left font-semibold tracking-wide">ID</th>
+                    <th className="p-3 text-left font-semibold tracking-wide">Name</th>
+                    <th className="p-3 text-left font-semibold tracking-wide">Email</th>
+                    <th className="p-3 text-left font-semibold tracking-wide">Role</th>
+                    <th className="p-3 text-left font-semibold tracking-wide">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {users.length === 0 ? (
-                    <tr>
-                      <td colSpan="5" className="text-center py-6 text-[#e0e7ff]">
-                        No users found.
+                  {users.map((user) => (
+                    <tr
+                      key={user._id}
+                      className="border-b border-[#1a2a6b] hover:bg-[#1a2a6b] transition duration-200"
+                    >
+                      <td className="p-3">{user._id}</td>
+                      <td className="p-3 capitalize">{user.name}</td>
+                      <td className="p-3">{user.email}</td>
+                      <td className="p-3">
+                        <select
+                          value={user.role}
+                          onChange={(e) => handleRoleChange(user._id, e.target.value)}
+                          className="bg-[#012465] border border-[#65a0ff] rounded px-2 py-1 text-sm text-[#e0e7ff] focus:outline-none focus:ring-2 focus:ring-[#65a0ff]"
+                        >
+                          <option value="Student">Student</option>
+                          <option value="Mentor">Mentor</option>
+                          <option value="Admin">Admin</option>
+                        </select>
+                      </td>
+                      <td className="px-4 py-3">
+                        <button
+                          className="text-[#ff5c5c] hover:underline"
+                          onClick={() => handleDelete(user._id)}
+                        >
+                          Delete
+                        </button>
                       </td>
                     </tr>
-                  ) : (
-                    users.map((user) => (
-                      <tr
-                        key={user._id}
-                        className="border-b border-[#1a2a6b] hover:bg-[#1a2a6b] transition-colors duration-200"
-                      >
-                        <td className="px-6 py-3 whitespace-nowrap">{user._id}</td>
-                        <td className="px-6 py-3 capitalize whitespace-nowrap">{user.name}</td>
-                        <td className="px-6 py-3 whitespace-nowrap">{user.email}</td>
-                        <td className="px-6 py-3 whitespace-nowrap">
-                          <select
-                            value={user.role}
-                            onChange={(e) => handleRoleChange(user._id, e.target.value)}
-                            className="bg-[#012465] border border-[#65a0ff] rounded px-2 py-1 text-sm text-[#e0e7ff] focus:outline-none focus:ring-2 focus:ring-[#65a0ff]"
-                          >
-                            <option value="Student">Student</option>
-                            <option value="Mentor">Mentor</option>
-                            <option value="Admin">Admin</option>
-                          </select>
-                        </td>
-                        <td className="px-6 py-3 whitespace-nowrap">
-                          <button
-                            className="text-[#ff5c5c] hover:underline"
-                            onClick={() => handleDelete(user._id)}
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  )}
+                  ))}
                 </tbody>
               </table>
+            </div>
+
+            {/* CARD LAYOUT FOR MOBILE */}
+            <div className="md:block lg:hidden space-y-4">
+              {users.map((user) => (
+                <div
+                  key={user._id}
+                  className="bg-[#012465] border border-[#65a0ff] rounded-lg p-4 shadow-md"
+                >
+                  <div className="mb-2">
+                    <span className="font-semibold text-[#65a0ff]">Name: </span>
+                    <span className="text-[#e0e7ff]">{user.name}</span>
+                  </div>
+                  <div className="mb-2">
+                    <span className="font-semibold text-[#65a0ff]">Email: </span>
+                    <span className="text-[#e0e7ff]">{user.email}</span>
+                  </div>
+                  <div className="mb-2">
+                    <span className="font-semibold text-[#65a0ff]">Role: </span>
+                    <select
+                      value={user.role}
+                      onChange={(e) => handleRoleChange(user._id, e.target.value)}
+                      className="bg-[#012465] border border-[#65a0ff] rounded px-2 py-1 text-sm text-[#e0e7ff] focus:outline-none focus:ring-2 focus:ring-[#65a0ff] mt-1"
+                    >
+                      <option value="Student">Student</option>
+                      <option value="Mentor">Mentor</option>
+                      <option value="Admin">Admin</option>
+                    </select>
+                  </div>
+                  <div>
+                    <button
+                      className="text-[#ff5c5c] hover:underline text-sm"
+                      onClick={() => handleDelete(user._id)}
+                    >
+                      Delete User
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           </>
         )}

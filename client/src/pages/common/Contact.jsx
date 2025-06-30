@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import api from "../../auth/Services/api";
@@ -46,7 +46,7 @@ const ContactPage = () => {
   };
 
   return (
-    <main id="contact" className="bg-[#01133d] text-white px-6 py-12">
+    <main id="contact" className="bg-[#01133d] text-white px-6 py-12 sm:py-16">
       <motion.section
         className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-start"
         initial={{ opacity: 0, y: 30 }}
@@ -54,7 +54,7 @@ const ContactPage = () => {
         transition={{ duration: 0.6 }}
       >
         {/* Contact Info */}
-        <address className="not-italic py-27">
+        <address className="not-italic py-4 space-y-4 text-base sm:text-lg">
           <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
           <p className="text-gray-300 mb-8">
             Have questions or suggestions? We'd love to hear from you!
@@ -62,10 +62,11 @@ const ContactPage = () => {
           <ul className="space-y-4 text-gray-400">
             <li>
               <strong>Email:</strong>{" "}
-              <a href="mailto:support@example.com">support@example.com</a>
+              <a href="mailto:support@example.com" className="hover:underline">support@example.com</a>
             </li>
             <li>
-              <strong>Phone:</strong> <a href="tel:+1234567890">+123 456 7890</a>
+              <strong>Phone:</strong>{" "}
+              <a href="tel:+1234567890" className="hover:underline">+123 456 7890</a>
             </li>
             <li>
               <strong>Location:</strong> Lahore, Pakistan
@@ -74,49 +75,49 @@ const ContactPage = () => {
         </address>
 
         {/* Contact Form */}
-        <form onSubmit={handleSubmit} className="bg-[#012465] p-8 rounded-xl shadow space-y-6">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-[#012465] p-6 sm:p-8 rounded-xl shadow space-y-6 text-sm sm:text-base"
+        >
           <div>
-            <label htmlFor="name" className="block text-sm mb-1">
-              Your Name
-            </label>
+            <label htmlFor="name" className="block text-sm mb-1">Your Name</label>
             <input
               id="name"
-              type="text"
               name="name"
+              aria-label="Your name"
+              type="text"
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 rounded bg-[#01133d] text-white border border-gray-600 focus:outline-none focus:border-blue-500"
+              className="w-full px-4 py-2 sm:py-3 rounded bg-[#01133d] text-white border border-gray-600 focus:outline-none focus:border-blue-500"
             />
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm mb-1">
-              Your Email
-            </label>
+            <label htmlFor="email" className="block text-sm mb-1">Your Email</label>
             <input
               id="email"
-              type="email"
               name="email"
+              aria-label="Your email"
+              type="email"
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 rounded bg-[#01133d] text-white border border-gray-600 focus:outline-none focus:border-blue-500"
+              className="w-full px-4 py-2 sm:py-3 rounded bg-[#01133d] text-white border border-gray-600 focus:outline-none focus:border-blue-500"
             />
           </div>
 
           <div>
-            <label htmlFor="message" className="block text-sm mb-1">
-              Your Message
-            </label>
+            <label htmlFor="message" className="block text-sm mb-1">Your Message</label>
             <textarea
               id="message"
               name="message"
+              aria-label="Your message"
               rows="5"
               value={formData.message}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 rounded bg-[#01133d] text-white border border-gray-600 focus:outline-none focus:border-blue-500"
+              className="w-full px-4 py-2 sm:py-3 rounded bg-[#01133d] text-white border border-gray-600 focus:outline-none focus:border-blue-500"
             />
           </div>
 
@@ -130,7 +131,7 @@ const ContactPage = () => {
         </form>
       </motion.section>
 
-      {/* Leaflet Map Section */}
+      {/* Map Section */}
       <motion.div
         className="max-w-6xl mx-auto mt-16"
         initial={{ opacity: 0 }}
@@ -138,9 +139,9 @@ const ContactPage = () => {
         transition={{ delay: 0.4, duration: 0.8 }}
       >
         <h2 className="text-2xl font-semibold mb-4 text-white">Find Us on Map</h2>
-        <div className="w-full h-64 rounded-lg overflow-hidden border-2 border-gray-700">
+        <div className="w-full h-64 sm:h-80 md:h-96 rounded-lg overflow-hidden border-2 border-gray-700">
           <MapContainer
-            center={[31.5204, 74.3587]} // Lahore coordinates
+            center={[31.5204, 74.3587]}
             zoom={13}
             style={{ height: "100%", width: "100%" }}
           >

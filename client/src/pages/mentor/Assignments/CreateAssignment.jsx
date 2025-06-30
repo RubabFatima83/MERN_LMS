@@ -52,34 +52,38 @@ const CreateAssignment = () => {
     }
   };
 
-
   return (
     <MentorLayout>
-      <div className="max-w-4xl mx-auto mt-10 mb-12 bg-[#0a1a4f] border border-[#65a0ff] rounded-2xl p-8 shadow-md text-white">
-        <h2 className="text-3xl font-bold mb-8 text-[#65a0ff]">Create New Assignment</h2>
+      <div className="max-w-4xl mx-auto mt-10 mb-12 bg-[#0a1a4f] border border-[#65a0ff] rounded-2xl p-6 sm:p-8 shadow-md text-white">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-8 text-[#65a0ff] text-center sm:text-left">
+          Create New Assignment
+        </h2>
+
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Select Course */}
           <div>
             <label className="block mb-1 text-sm font-medium text-[#65a0ff]">Select Course</label>
             <select
-              className="w-full bg-transparent text-white border border-[#65a0ff] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#65a0ff]"
+              className="w-full bg-[#0a1a4f] text-white border border-[#65a0ff] rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#65a0ff]"
               value={courseId}
               onChange={(e) => setCourseId(e.target.value)}
               required
             >
-              <option value="" disabled className="bg-[#0a1a4f] text-gray-400">Select Course</option>
+              <option value="" disabled className="text-gray-400">Select Course</option>
               {courses.map((course) => (
-                <option key={course._id} value={course._id} className="bg-[#0a1a4f] text-white">
+                <option key={course._id} value={course._id}>
                   {course.title}
                 </option>
               ))}
             </select>
           </div>
 
+          {/* Assignment Title */}
           <div>
             <label className="block mb-1 text-sm font-medium text-[#65a0ff]">Assignment Title</label>
             <input
               type="text"
-              className="w-full bg-transparent text-white border border-[#65a0ff] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#65a0ff]"
+              className="w-full bg-transparent text-white border border-[#65a0ff] rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#65a0ff]"
               placeholder="Enter title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -87,43 +91,44 @@ const CreateAssignment = () => {
             />
           </div>
 
+          {/* Description */}
           <div>
             <label className="block mb-1 text-sm font-medium text-[#65a0ff]">Assignment Description</label>
             <textarea
               rows={4}
-              className="w-full bg-transparent text-white border border-[#65a0ff] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#65a0ff]"
+              className="w-full bg-transparent text-white border border-[#65a0ff] rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#65a0ff]"
               placeholder="Enter description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>
           </div>
 
+          {/* Due Date */}
           <div>
             <label className="block mb-1 text-sm font-medium text-[#65a0ff]">Due Date</label>
             <input
               type="date"
-              className="w-full bg-transparent text-white border border-[#65a0ff] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#65a0ff]"
+              className="w-full bg-transparent text-white border border-[#65a0ff] rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#65a0ff]"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
               required
             />
           </div>
 
+          {/* File Upload */}
           <div>
             <label className="block mb-1 text-sm font-medium text-[#65a0ff]">Attach File (optional)</label>
-
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
               <label
                 htmlFor="assignmentFileInput"
-                className="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700 flex items-center gap-2"
+                className="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700 flex items-center gap-2 text-sm sm:text-base"
               >
                 <FaUpload /> Choose File
               </label>
-              <span className="text-sm text-gray-300">
+              <span className="text-sm text-gray-300 truncate">
                 {file ? file.name : "No file chosen"}
               </span>
             </div>
-
             <input
               id="assignmentFileInput"
               type="file"
@@ -132,12 +137,11 @@ const CreateAssignment = () => {
             />
           </div>
 
-
-
+          {/* Submit Button */}
           <div className="flex justify-end">
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 transition-all duration-200 text-white font-semibold px-6 py-2 rounded-lg shadow"
+              className="bg-blue-600 hover:bg-blue-700 transition duration-200 text-white font-semibold px-6 py-2 rounded-lg shadow text-sm sm:text-base"
             >
               Create Assignment
             </button>

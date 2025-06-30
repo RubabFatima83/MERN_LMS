@@ -12,7 +12,7 @@ import SubscriptionPage from '../Subscription/SubscriptionPage'
 
 const Home = () => {
   return (
-    <>
+    <div className="w-full">
       <Navbar />
       <HeroSection />
       <CourseSection />
@@ -23,7 +23,7 @@ const Home = () => {
       <FaqSection />
       <Contact />
       <Footer />
-    </>
+    </div>
   )
 }
 

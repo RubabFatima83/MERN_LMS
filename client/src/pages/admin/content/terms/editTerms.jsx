@@ -41,7 +41,7 @@ const EditTerms = () => {
   return (
     <AdminLayout>
       <div className="max-w-3xl mx-auto mt-10 mb-12">
-        <h2 className="text-3xl font-extrabold text-[#65a0ff] mb-6">Edit FAQ</h2>
+        <h2 className="text-2xl md:text-3xl font-extrabold text-[#65a0ff] mb-6">Edit FAQ</h2>
         <TermsForm
           formData={formData}
           handleChange={handleChange}
