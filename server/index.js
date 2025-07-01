@@ -73,6 +73,11 @@ app.get('/', (req, res) => {
   res.send('A Collaborative Learning Platform for Students');
 });
 
+app.get('/healthz', (req, res) => {
+  res.status(200).send('OK');
+});
+
+
 // ✅ Start Server
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () =>
