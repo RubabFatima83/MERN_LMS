@@ -9,8 +9,8 @@ const sendToken = require('../utils/sendAuthenticationToken')
 
 // Sign up
 const signUp = catchAsyncErrors(async (req, res, next) => {
-    const { name, email, dateOfBirth } = req.body
-    if (!name || !email || !dateOfBirth) {
+    const { name, email, password, role } = req.body
+    if (!name || !email || !password || !role) {
         return next(new ErrorHandler('All fields are required.', 400))
     }
 
@@ -19,7 +19,7 @@ const signUp = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('User already exists!', 400))
     }
 
-    const user = await User.create({ name, email, dateOfBirth })
+    const user = await User.create({ name, email, password, role })
 
     if (user) {
         const otp = generateOTP()
